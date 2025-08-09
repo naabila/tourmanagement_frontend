@@ -1,14 +1,31 @@
 import { GalleryVerticalEnd } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod"
+
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form"
 import { Input } from "../../ui/input"
+import { z } from "zod"
+import { Button } from "../../ui/button"
 
 
-function RegistrationForm(){
-    const form = useForm();
-    const onSubmit=(data:string)=>{
-    console.log(data)
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+function RegistrationForm(
+  {  className,
+  ...props}: React.HTMLAttributes<HTMLDivElement>){
+     // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+    },
+  })
+    const onSubmit=(values: z.infer<typeof formSchema>)=>{
+    console.log(values)
 }
     return(
         <>
